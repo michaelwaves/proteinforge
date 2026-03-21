@@ -152,7 +152,26 @@ function ChatPanelInner({
     textarea.style.height = Math.min(textarea.scrollHeight, 200) + "px";
   }
 
+  async function handleGenerate() {
+    const allText = messages
+      .map((m) => m.parts?.filter((p) => p.type === "text").map((p) => (p as { text: string }).text).join(" "))
+      .join("\n");
+    const prompt = allText.trim() || "generate a protein";
+
+    try {
+      const res = await fetch(`${BACKEND}/generate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt, chat_id: chatId, max_iterations: maxIterations }),
+      });
+      const job = await res.json();
+      onJobCreated(job.job_id);
+      pollJobUntilComplete(job.job_id);
+    } catch { /* backend error */ }
+  }
+
   const isStreaming = status === "streaming" || status === "submitted";
+  const hasConversation = messages.length >= 2;
 
   return (
     <div className="flex flex-1 flex-col bg-white">
@@ -172,6 +191,16 @@ function ChatPanelInner({
           {messages.map((message) => (
             <MessageBubble key={message.id} message={message} />
           ))}
+          {hasConversation && !isStreaming && (
+            <div className="flex justify-center pt-2">
+              <button
+                onClick={handleGenerate}
+                className="rounded-full border border-blue-200 bg-blue-50 px-5 py-2 text-sm font-medium text-blue-700 transition-all hover:bg-blue-100 hover:border-blue-300"
+              >
+                Generate ({maxIterations === 1 ? "single shot" : `${maxIterations} iterations`})
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

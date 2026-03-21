@@ -1,0 +1,4 @@
+- contigmap.contigs=[120-140]
+- inference.output_prefix=/workspace/RFdiffusion/outputs/users/anonymous/bd29d865/ccaf3a8d0a8a/v1/design
+- inference.num_designs=1
+- +inference.seed=42

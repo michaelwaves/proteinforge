@@ -64,7 +64,7 @@ def log_agent_message(job_id: str, message) -> None:
     if isinstance(message, AssistantMessage):
         for block in message.content:
             if isinstance(block, TextBlock):
-                line = f"💬 {block.text[:200]}"
+                line = f"💬 {block.text[:300]}"
                 log.info(f"{tag} {line}")
                 append_log(job_id, line)
             elif isinstance(block, ToolUseBlock):
@@ -72,11 +72,11 @@ def log_agent_message(job_id: str, message) -> None:
                 log.info(f"{tag} {line}")
                 append_log(job_id, line)
             elif isinstance(block, ToolResultBlock):
-                preview = str(block.content)[:150] if block.content else ""
-                icon = "❌" if block.is_error else "✅"
-                line = f"{icon} {preview}"
-                log.info(f"{tag} {line}")
-                append_log(job_id, line)
+                if not block.content:
+                    continue
+                for result_line in _format_tool_result(block):
+                    log.info(f"{tag} {result_line}")
+                    append_log(job_id, result_line)
 
     elif isinstance(message, ResultMessage):
         line = f"🏁 Done — turns={message.num_turns} cost=${message.total_cost_usd}"
@@ -84,12 +84,27 @@ def log_agent_message(job_id: str, message) -> None:
         append_log(job_id, line)
 
 
+def _format_tool_result(block: ToolResultBlock) -> list[str]:
+    icon = "❌" if block.is_error else "  "
+    raw = str(block.content)
+    lines = raw.split("\n")
+    result = []
+    for line in lines[:30]:
+        trimmed = line.rstrip()
+        if not trimmed:
+            continue
+        result.append(f"{icon} {trimmed[:200]}")
+    if len(lines) > 30:
+        result.append(f"{icon} ... ({len(lines) - 30} more lines)")
+    return result
+
+
 def _summarize_input(tool_input: dict) -> str:
     if "command" in tool_input:
-        return tool_input["command"][:120]
+        return tool_input["command"][:300]
     if "file_path" in tool_input:
         return tool_input["file_path"]
-    return str(tool_input)[:80]
+    return str(tool_input)[:120]
 
 
 def save_input_pdb_if_provided(job: Job) -> str | None:

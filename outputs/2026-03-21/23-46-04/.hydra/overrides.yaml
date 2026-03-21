@@ -1,0 +1,3 @@
+- contigmap.contigs=[90-110]
+- inference.output_prefix=/workspace/RFdiffusion/outputs/users/anonymous/bd29d865/ccaf3a8d0a8a/v0/design
+- inference.num_designs=1

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 interface ProteinViewerProps {
   jobId: string | null;
@@ -29,42 +29,55 @@ export function ProteinViewer({ jobId, iteration }: ProteinViewerProps) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const viewerRef = useRef<any>(null);
   const [ready, setReady] = useState(false);
+  const lastLoadedRef = useRef<string>("");
 
   useEffect(() => {
     load3DmolScript().then(() => setReady(true));
   }, []);
 
-  useEffect(() => {
-    if (!ready || !jobId || !containerRef.current) return;
-
+  const loadPdb = useCallback((pdbData: string) => {
+    if (!containerRef.current) return;
     const mol = get3Dmol();
     if (!mol) return;
 
-    const url = `http://localhost:8000/jobs/${jobId}/artifacts/v${iteration}/design_0.pdb`;
+    if (viewerRef.current) {
+      viewerRef.current.removeAllModels();
+    } else {
+      viewerRef.current = mol.createViewer(containerRef.current, {
+        backgroundColor: "white",
+      });
+    }
 
+    viewerRef.current.addModel(pdbData, "pdb");
+    viewerRef.current.setStyle({}, { cartoon: { color: "spectrum" } });
+    viewerRef.current.zoomTo();
+    viewerRef.current.render();
+  }, []);
+
+  const fetchAndLoad = useCallback((url: string) => {
     fetch(url)
       .then((res) => {
-        if (!res.ok) throw new Error("PDB not found");
+        if (!res.ok) throw new Error("not found");
         return res.text();
       })
       .then((pdbData) => {
-        if (!containerRef.current) return;
-
-        if (viewerRef.current) {
-          viewerRef.current.removeAllModels();
-        } else {
-          viewerRef.current = mol.createViewer(containerRef.current, {
-            backgroundColor: "white",
-          });
-        }
-
-        viewerRef.current.addModel(pdbData, "pdb");
-        viewerRef.current.setStyle({}, { cartoon: { color: "spectrum" } });
-        viewerRef.current.zoomTo();
-        viewerRef.current.render();
+        if (lastLoadedRef.current === pdbData) return;
+        lastLoadedRef.current = pdbData;
+        loadPdb(pdbData);
       })
       .catch(() => {});
-  }, [ready, jobId, iteration]);
+  }, [loadPdb]);
+
+  useEffect(() => {
+    if (!ready || !jobId) return;
+
+    const url = `http://localhost:8000/jobs/${jobId}/artifacts/v${iteration}/design_0.pdb`;
+    lastLoadedRef.current = "";
+    fetchAndLoad(url);
+
+    const interval = setInterval(() => fetchAndLoad(url), 5000);
+    return () => clearInterval(interval);
+  }, [ready, jobId, iteration, fetchAndLoad]);
 
   if (!jobId) {
     return (

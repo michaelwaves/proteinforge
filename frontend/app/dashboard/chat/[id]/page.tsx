@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { use, useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ChatPanel } from "@/components/chat-panel";
 import { ProteinViewer } from "@/components/protein-viewer";
@@ -19,6 +19,7 @@ export default function ChatPage({
   const [jobId, setJobId] = useState<string | null>(null);
   const [iteration, setIteration] = useState(0);
   const [maxIteration, setMaxIteration] = useState(0);
+  const userSelectedRef = useRef(false);
 
   useEffect(() => {
     fetch(`${BACKEND}/jobs/${id}`)
@@ -35,13 +36,37 @@ export default function ChatPage({
       .catch(() => {});
   }, [id]);
 
-  async function handleJobCompleted() {
+  useEffect(() => {
     if (!jobId) return;
-    const res = await fetch(`${BACKEND}/jobs/${jobId}`);
-    const job = await res.json();
-    const iters = job.current_iteration || 1;
-    setMaxIteration(iters - 1);
-    setIteration(iters - 1);
+
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch(`${BACKEND}/jobs/${jobId}`);
+        if (!res.ok) return;
+        const job = await res.json();
+        const iters = job.current_iteration || 0;
+        if (iters <= 0) return;
+
+        const newMax = iters - 1;
+        if (newMax > maxIteration) {
+          setMaxIteration(newMax);
+          if (!userSelectedRef.current) {
+            setIteration(newMax);
+          }
+        }
+        if (job.status === "completed" || job.status === "failed") {
+          clearInterval(interval);
+          userSelectedRef.current = false;
+        }
+      } catch { /* backend unreachable */ }
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [jobId, maxIteration]);
+
+  function handleIterationChange(value: number) {
+    userSelectedRef.current = true;
+    setIteration(value);
   }
 
   return (
@@ -53,8 +78,9 @@ export default function ChatPage({
             setJobId(newJobId);
             setIteration(0);
             setMaxIteration(0);
+            userSelectedRef.current = false;
           }}
-          onJobCompleted={handleJobCompleted}
+          onJobCompleted={() => { userSelectedRef.current = false; }}
         />
       </div>
 
@@ -77,7 +103,7 @@ export default function ChatPage({
               <IterationSlider
                 value={iteration}
                 max={maxIteration}
-                onChange={setIteration}
+                onChange={handleIterationChange}
               />
             )}
           </div>
