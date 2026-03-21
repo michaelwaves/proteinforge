@@ -1,0 +1,10 @@
+- inference.symmetry=C8
+- inference.num_designs=1
+- inference.output_prefix=/outputs/users/anonymous/default/aa876232fa97/v0/design
+- potentials.guiding_potentials=["type:olig_contacts,weight_intra:1,weight_inter:0.1"]
+- potentials.olig_intra_all=True
+- potentials.olig_inter_all=True
+- potentials.guide_scale=2.0
+- potentials.guide_decay=quadratic
+- contigmap.contigs=[480-480]
+- inference.radius=12.0

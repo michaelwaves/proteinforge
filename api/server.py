@@ -1,6 +1,9 @@
+import logging
 import uuid
 
 from fastapi import BackgroundTasks, FastAPI, HTTPException
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
 
 from api.jobs import get_job, list_jobs, save_job
 from api.models import GenerateRequest, Job
