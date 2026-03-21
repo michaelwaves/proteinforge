@@ -14,6 +14,7 @@ from claude_agent_sdk import (
 
 from api.agent import REPO_ROOT, build_system_prompt, build_user_prompt
 from api.jobs import save_job
+from api.logs import append_log
 from api.models import Job
 
 log = logging.getLogger(__name__)
@@ -62,16 +63,24 @@ def log_agent_message(job_id: str, message) -> None:
     if isinstance(message, AssistantMessage):
         for block in message.content:
             if isinstance(block, TextBlock):
-                log.info(f"{tag} 💬 {block.text[:200]}")
+                line = f"💬 {block.text[:200]}"
+                log.info(f"{tag} {line}")
+                append_log(job_id, line)
             elif isinstance(block, ToolUseBlock):
-                log.info(f"{tag} 🔧 {block.name}({_summarize_input(block.input)})")
+                line = f"🔧 {block.name}({_summarize_input(block.input)})"
+                log.info(f"{tag} {line}")
+                append_log(job_id, line)
             elif isinstance(block, ToolResultBlock):
                 preview = str(block.content)[:150] if block.content else ""
-                status = "❌" if block.is_error else "✅"
-                log.info(f"{tag} {status} {preview}")
+                icon = "❌" if block.is_error else "✅"
+                line = f"{icon} {preview}"
+                log.info(f"{tag} {line}")
+                append_log(job_id, line)
 
     elif isinstance(message, ResultMessage):
-        log.info(f"{tag} 🏁 Done — turns={message.num_turns} cost=${message.total_cost_usd}")
+        line = f"🏁 Done — turns={message.num_turns} cost=${message.total_cost_usd}"
+        log.info(f"{tag} {line}")
+        append_log(job_id, line)
 
 
 def _summarize_input(tool_input: dict) -> str:

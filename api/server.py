@@ -1,17 +1,30 @@
 import logging
+import os
 import uuid
 
 from fastapi import BackgroundTasks, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(message)s")
 
-from api.jobs import get_job, list_jobs, save_job
+from api.jobs import discover_existing_jobs, get_job, list_jobs, save_job
+from api.logs import get_logs
 from api.models import GenerateRequest, Job
 from api.runner import run_design_agent
 
 OUTPUTS_ROOT = "/workspace/RFdiffusion/outputs/users"
 
 app = FastAPI(title="RFdiffusion Chat API")
+
+discover_existing_jobs()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/health")
@@ -40,6 +53,22 @@ def get_job_by_id(job_id: str):
     return job
 
 
+@app.get("/jobs/{job_id}/logs")
+def get_job_logs(job_id: str):
+    return {"logs": get_logs(job_id)}
+
+
+@app.get("/jobs/{job_id}/artifacts/{path:path}")
+def get_artifact(job_id: str, path: str):
+    job = get_job(job_id)
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+    file_path = os.path.join(job.output_dir, path)
+    if not os.path.isfile(file_path):
+        raise HTTPException(status_code=404, detail="Artifact not found")
+    return FileResponse(file_path)
+
+
 def create_job_from_request(request: GenerateRequest) -> Job:
     job_id = uuid.uuid4().hex[:12]
     output_dir = f"{OUTPUTS_ROOT}/{request.user_id}/{request.chat_id}/{job_id}"
@@ -52,5 +81,3 @@ def create_job_from_request(request: GenerateRequest) -> Job:
         output_dir=output_dir,
         pdb=request.pdb,
     )
-
-
