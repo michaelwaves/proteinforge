@@ -1,10 +1,13 @@
 "use client";
 
 import { use, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { ChatPanel } from "@/components/chat-panel";
 import { ProteinViewer } from "@/components/protein-viewer";
 import { IterationSlider } from "@/components/iteration-slider";
 import { AgentConsole } from "@/components/agent-console";
+
+const BACKEND = "http://localhost:8000";
 
 export default function ChatPage({
   params,
@@ -12,16 +15,14 @@ export default function ChatPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
+  const router = useRouter();
   const [jobId, setJobId] = useState<string | null>(null);
   const [iteration, setIteration] = useState(0);
   const [maxIteration, setMaxIteration] = useState(0);
 
   useEffect(() => {
-    fetch(`http://localhost:8000/jobs/${id}`)
-      .then((res) => {
-        if (!res.ok) return null;
-        return res.json();
-      })
+    fetch(`${BACKEND}/jobs/${id}`)
+      .then((res) => (res.ok ? res.json() : null))
       .then((job) => {
         if (!job) return;
         setJobId(job.job_id);
@@ -34,9 +35,18 @@ export default function ChatPage({
       .catch(() => {});
   }, [id]);
 
+  async function handleJobCompleted() {
+    if (!jobId) return;
+    const res = await fetch(`${BACKEND}/jobs/${jobId}`);
+    const job = await res.json();
+    const iters = job.current_iteration || 1;
+    setMaxIteration(iters - 1);
+    setIteration(iters - 1);
+  }
+
   return (
     <div className="flex h-full w-full">
-      <div className="flex w-1/2 flex-col border-r border-slate-150">
+      <div className="flex w-1/2 flex-col border-r border-slate-200">
         <ChatPanel
           chatId={id}
           onJobCreated={(newJobId) => {
@@ -44,25 +54,35 @@ export default function ChatPage({
             setIteration(0);
             setMaxIteration(0);
           }}
-          onJobCompleted={(iterations) => {
-            setMaxIteration(iterations - 1);
-            setIteration(iterations - 1);
-          }}
+          onJobCompleted={handleJobCompleted}
         />
       </div>
 
       <div className="flex w-1/2 flex-col">
-        <div className="flex flex-1 flex-col border-b border-border">
-          <ProteinViewer jobId={jobId} iteration={iteration} />
-          {maxIteration > 0 && (
-            <IterationSlider
-              value={iteration}
-              max={maxIteration}
-              onChange={setIteration}
-            />
-          )}
+        <div className="flex flex-1 flex-col">
+          <div className="flex items-center justify-between border-b border-slate-200 px-4 py-2">
+            <button
+              onClick={() => router.push("/dashboard")}
+              className="text-xs text-slate-400 hover:text-slate-600 transition-colors"
+            >
+              ← Dashboard
+            </button>
+            {jobId && (
+              <span className="text-[11px] text-slate-400 font-mono">{jobId}</span>
+            )}
+          </div>
+          <div className="flex flex-1 flex-col">
+            <ProteinViewer jobId={jobId} iteration={iteration} />
+            {maxIteration > 0 && (
+              <IterationSlider
+                value={iteration}
+                max={maxIteration}
+                onChange={setIteration}
+              />
+            )}
+          </div>
         </div>
-        <div className="h-1/3">
+        <div className="h-1/3 min-h-0">
           <AgentConsole jobId={jobId} />
         </div>
       </div>

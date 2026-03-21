@@ -3,7 +3,12 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-interface JobSummary {
+interface ChatEntry {
+  chat_id: string;
+  preview: string;
+}
+
+interface JobEntry {
   job_id: string;
   prompt: string;
   status: string;
@@ -12,18 +17,31 @@ interface JobSummary {
 
 export function ChatList() {
   const router = useRouter();
-  const [jobs, setJobs] = useState<JobSummary[]>([]);
+  const [entries, setEntries] = useState<{ id: string; preview: string; badge?: string }[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/jobs")
-      .then((res) => res.json())
-      .then(setJobs)
-      .catch(() => {});
+    Promise.all([
+      fetch("http://localhost:8000/chats").then((r) => r.json()).catch(() => []),
+      fetch("http://localhost:8000/jobs").then((r) => r.json()).catch(() => []),
+    ]).then(([chats, jobs]: [ChatEntry[], JobEntry[]]) => {
+      const seen = new Set<string>();
+      const result: { id: string; preview: string; badge?: string }[] = [];
+
+      for (const chat of chats) {
+        seen.add(chat.chat_id);
+        result.push({ id: chat.chat_id, preview: chat.preview || "Chat session" });
+      }
+      for (const job of jobs) {
+        if (seen.has(job.job_id)) continue;
+        result.push({ id: job.job_id, preview: job.prompt, badge: job.status });
+      }
+      setEntries(result);
+    });
   }, []);
 
-  if (jobs.length === 0) {
+  if (entries.length === 0) {
     return (
-      <p className="text-sm text-muted-foreground py-4 text-center">
+      <p className="text-sm text-slate-400 py-4 text-center">
         No sessions yet. Start your first design above.
       </p>
     );
@@ -31,38 +49,18 @@ export function ChatList() {
 
   return (
     <div className="space-y-2">
-      {jobs.map((job) => (
+      {entries.map((entry) => (
         <button
-          key={job.job_id}
-          onClick={() => router.push(`/dashboard/chat/${job.job_id}`)}
-          className="w-full rounded-xl border border-border bg-card p-4 text-left transition-all hover:border-blue-300 hover:shadow-sm"
+          key={entry.id}
+          onClick={() => router.push(`/dashboard/chat/${entry.id}`)}
+          className="w-full rounded-xl border border-slate-200 bg-white p-4 text-left transition-all hover:border-blue-300 hover:shadow-sm"
         >
-          <div className="flex items-center justify-between">
-            <p className="text-sm font-medium text-foreground truncate pr-4">
-              {job.prompt}
-            </p>
-            <StatusBadge status={job.status} />
-          </div>
-          <p className="text-xs text-muted-foreground mt-1">
-            {job.current_iteration} iteration{job.current_iteration !== 1 ? "s" : ""}
+          <p className="text-sm font-medium text-slate-700 truncate">
+            {entry.preview}
           </p>
+          <p className="text-xs text-slate-400 mt-1">{entry.id}</p>
         </button>
       ))}
     </div>
-  );
-}
-
-function StatusBadge({ status }: { status: string }) {
-  const styles = {
-    completed: "bg-emerald-100 text-emerald-700",
-    running: "bg-blue-100 text-blue-700",
-    queued: "bg-amber-100 text-amber-700",
-    failed: "bg-red-100 text-red-700",
-  }[status] ?? "bg-gray-100 text-gray-700";
-
-  return (
-    <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${styles}`}>
-      {status}
-    </span>
   );
 }

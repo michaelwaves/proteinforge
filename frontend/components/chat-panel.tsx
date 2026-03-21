@@ -2,13 +2,33 @@
 
 import { useRef, useEffect, useCallback, useState } from "react";
 import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport } from "ai";
+import { DefaultChatTransport, UIMessage } from "ai";
 import { MessageBubble } from "@/components/message-bubble";
+
+const BACKEND = "http://localhost:8000";
 
 interface ChatPanelProps {
   chatId: string;
   onJobCreated: (jobId: string) => void;
-  onJobCompleted: (iterations: number) => void;
+  onJobCompleted: () => void;
+}
+
+async function loadTranscript(chatId: string): Promise<UIMessage[]> {
+  try {
+    const res = await fetch(`${BACKEND}/chats/${chatId}`);
+    if (!res.ok) return [];
+    return await res.json();
+  } catch {
+    return [];
+  }
+}
+
+function saveTranscript(chatId: string, messages: UIMessage[]) {
+  fetch(`${BACKEND}/chats/${chatId}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(messages),
+  }).catch(() => {});
 }
 
 export function ChatPanel({ chatId, onJobCreated, onJobCompleted }: ChatPanelProps) {
@@ -16,10 +36,53 @@ export function ChatPanel({ chatId, onJobCreated, onJobCompleted }: ChatPanelPro
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const trackedJobsRef = useRef<Set<string>>(new Set());
   const [maxIterations, setMaxIterations] = useState(3);
+  const [initialMessages, setInitialMessages] = useState<UIMessage[] | null>(null);
 
+  useEffect(() => {
+    loadTranscript(chatId).then(setInitialMessages);
+  }, [chatId]);
+
+  if (initialMessages === null) {
+    return <div className="flex flex-1 items-center justify-center text-sm text-slate-400">Loading...</div>;
+  }
+
+  return (
+    <ChatPanelInner
+      chatId={chatId}
+      initialMessages={initialMessages}
+      onJobCreated={onJobCreated}
+      onJobCompleted={onJobCompleted}
+      scrollRef={scrollRef}
+      textareaRef={textareaRef}
+      trackedJobsRef={trackedJobsRef}
+      maxIterations={maxIterations}
+      setMaxIterations={setMaxIterations}
+    />
+  );
+}
+
+function ChatPanelInner({
+  chatId,
+  initialMessages,
+  onJobCreated,
+  onJobCompleted,
+  scrollRef,
+  textareaRef,
+  trackedJobsRef,
+  maxIterations,
+  setMaxIterations,
+}: ChatPanelProps & {
+  initialMessages: UIMessage[];
+  scrollRef: React.RefObject<HTMLDivElement | null>;
+  textareaRef: React.RefObject<HTMLTextAreaElement | null>;
+  trackedJobsRef: React.RefObject<Set<string>>;
+  maxIterations: number;
+  setMaxIterations: (n: number) => void;
+}) {
   const { messages, sendMessage, status } = useChat({
     id: chatId,
     transport: new DefaultChatTransport({ api: "/api/chat" }),
+    messages: initialMessages,
   });
 
   const trackJobs = useCallback(() => {
@@ -36,18 +99,24 @@ export function ChatPanel({ chatId, onJobCreated, onJobCompleted }: ChatPanelPro
         }
       }
     }
-  }, [messages, onJobCreated]);
+  }, [messages, onJobCreated, trackedJobsRef]);
 
   useEffect(() => { trackJobs(); }, [trackJobs]);
+
+  useEffect(() => {
+    if (messages.length > 0 && status === "ready") {
+      saveTranscript(chatId, messages);
+    }
+  }, [messages, status, chatId]);
 
   async function pollJobUntilComplete(jobId: string) {
     for (let i = 0; i < 120; i++) {
       await new Promise((r) => setTimeout(r, 5000));
       try {
-        const res = await fetch(`http://localhost:8000/jobs/${jobId}`);
+        const res = await fetch(`${BACKEND}/jobs/${jobId}`);
         const job = await res.json();
         if (job.status === "completed" || job.status === "failed") {
-          onJobCompleted(job.current_iteration || 3);
+          onJobCompleted();
           break;
         }
       } catch { /* keep polling */ }
@@ -56,7 +125,7 @@ export function ChatPanel({ chatId, onJobCreated, onJobCompleted }: ChatPanelPro
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-  }, [messages]);
+  }, [messages, scrollRef]);
 
   function handleSubmit() {
     const textarea = textareaRef.current;

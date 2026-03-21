@@ -13,7 +13,7 @@ from claude_agent_sdk import (
 )
 
 from api.agent import REPO_ROOT, build_system_prompt, build_user_prompt
-from api.jobs import save_job
+from api.jobs import count_iterations, save_job
 from api.logs import append_log
 from api.models import Job
 
@@ -26,6 +26,7 @@ async def run_design_agent(job: Job) -> None:
         os.makedirs(job.output_dir, exist_ok=True)
         input_pdb_path = save_input_pdb_if_provided(job)
         await invoke_claude_agent(job, input_pdb_path)
+        job.current_iteration = count_iterations(job.output_dir)
         update_job_status(job, "completed")
     except Exception as error:
         update_job_status(job, "failed", error=str(error))
