@@ -1,0 +1,9 @@
+- inference.output_prefix=/workspace/RFdiffusion/outputs/users/anonymous/716e8aff/137ca0049836/v1/design
+- inference.num_designs=1
+- scaffoldguided.scaffoldguided=True
+- scaffoldguided.scaffold_dir=/workspace/RFdiffusion/outputs/users/anonymous/716e8aff/137ca0049836/v1/scaffolds
+- scaffoldguided.sampled_insertion=0
+- scaffoldguided.sampled_N=0
+- scaffoldguided.sampled_C=0
+- scaffoldguided.ss_mask=0
+- scaffoldguided.mask_loops=False

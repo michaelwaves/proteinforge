@@ -1,0 +1,9 @@
+- inference.symmetry=C6
+- contigmap.contigs=[198-198]
+- inference.output_prefix=/workspace/RFdiffusion/outputs/users/anonymous/c92adfe2/e41a37273e76/v0/design
+- inference.num_designs=1
+- potentials.guiding_potentials=["type:olig_contacts,weight_intra:1,weight_inter:0.1"]
+- potentials.olig_intra_all=True
+- potentials.olig_inter_all=True
+- potentials.guide_scale=2.0
+- potentials.guide_decay=quadratic

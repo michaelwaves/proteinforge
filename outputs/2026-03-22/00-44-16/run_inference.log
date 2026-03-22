@@ -1,0 +1,17 @@
+[2026-03-22 00:44:16,849][__main__][INFO] - Found GPU with device_name NVIDIA L40S. Will run RFdiffusion on NVIDIA L40S
+[2026-03-22 00:44:16,850][rfdiffusion.inference.model_runners][INFO] - Reading checkpoint from /workspace/RFdiffusion/rfdiffusion/inference/../../models/Base_ckpt.pt
+[2026-03-22 00:44:24,206][rfdiffusion.inference.model_runners][INFO] - Loading checkpoint.
+[2026-03-22 00:44:24,316][rfdiffusion.diffusion][INFO] - Using cached IGSO3.
+[2026-03-22 00:44:24,334][__main__][INFO] - Making design outputs/users/anonymous/5f119f7e/3c19f4f174a7/v2/design_0
+[2026-03-22 00:44:24,337][rfdiffusion.inference.model_runners][INFO] - Using contig: ['51-51']
+[2026-03-22 00:44:24,363][rfdiffusion.inference.model_runners][INFO] - Sequence init: ---------------------------------------------------
+[2026-03-22 00:44:25,782][rfdiffusion.inference.model_runners][INFO] - Timestep 10, input to next step: ---------------------------------------------------
+[2026-03-22 00:44:26,183][rfdiffusion.inference.model_runners][INFO] - Timestep 9, input to next step: ---------------------------------------------------
+[2026-03-22 00:44:26,564][rfdiffusion.inference.model_runners][INFO] - Timestep 8, input to next step: ---------------------------------------------------
+[2026-03-22 00:44:26,944][rfdiffusion.inference.model_runners][INFO] - Timestep 7, input to next step: ---------------------------------------------------
+[2026-03-22 00:44:27,323][rfdiffusion.inference.model_runners][INFO] - Timestep 6, input to next step: ---------------------------------------------------
+[2026-03-22 00:44:27,702][rfdiffusion.inference.model_runners][INFO] - Timestep 5, input to next step: ---------------------------------------------------
+[2026-03-22 00:44:28,080][rfdiffusion.inference.model_runners][INFO] - Timestep 4, input to next step: ---------------------------------------------------
+[2026-03-22 00:44:28,460][rfdiffusion.inference.model_runners][INFO] - Timestep 3, input to next step: ---------------------------------------------------
+[2026-03-22 00:44:28,841][rfdiffusion.inference.model_runners][INFO] - Timestep 2, input to next step: ---------------------------------------------------
+[2026-03-22 00:44:29,307][__main__][INFO] - Finished design in 0.08 minutes

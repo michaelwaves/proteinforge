@@ -13,6 +13,13 @@ interface ChatPanelProps {
   onJobCompleted: () => void;
 }
 
+function sanitizeMessages(messages: UIMessage[]): UIMessage[] {
+  return messages.map((msg) => ({
+    ...msg,
+    parts: (msg.parts ?? []).filter((p) => p.type === "text"),
+  }));
+}
+
 async function loadTranscript(chatId: string): Promise<UIMessage[]> {
   try {
     const res = await fetch(`${BACKEND}/chats/${chatId}`);
@@ -54,7 +61,10 @@ export function ChatPanel({ chatId, onJobCreated, onJobCompleted }: ChatPanelPro
   const [initialMessages, setInitialMessages] = useState<UIMessage[] | null>(null);
 
   useEffect(() => {
-    loadTranscript(chatId).then(setInitialMessages);
+    loadTranscript(chatId)
+      .then(sanitizeMessages)
+      .then(setInitialMessages)
+      .catch(() => setInitialMessages([]));
   }, [chatId]);
 
   if (initialMessages === null) {

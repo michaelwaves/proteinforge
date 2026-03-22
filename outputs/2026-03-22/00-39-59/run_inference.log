@@ -1,0 +1,7 @@
+[2026-03-22 00:39:59,695][__main__][INFO] - Found GPU with device_name NVIDIA L40S. Will run RFdiffusion on NVIDIA L40S
+[2026-03-22 00:39:59,695][rfdiffusion.inference.model_runners][INFO] - Reading checkpoint from models/Complex_Fold_base_ckpt.pt
+[2026-03-22 00:40:07,082][rfdiffusion.inference.model_runners][INFO] - Loading checkpoint.
+[2026-03-22 00:40:07,194][rfdiffusion.diffusion][INFO] - Using cached IGSO3.
+[2026-03-22 00:40:07,214][__main__][INFO] - Making design outputs/users/anonymous/5f119f7e/3c19f4f174a7/v1/design_0
+[2026-03-22 00:40:07,220][rfdiffusion.inference.model_runners][INFO] - Using contig: ['65-65']
+[2026-03-22 00:40:07,249][rfdiffusion.inference.model_runners][INFO] - Sequence init: -----------------------------------------------------------------

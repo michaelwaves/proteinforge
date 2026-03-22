@@ -16,27 +16,45 @@ interface JobEntry {
   current_iteration: number;
 }
 
+interface ListItem {
+  id: string;
+  preview: string;
+}
+
 export function ChatList() {
   const router = useRouter();
-  const [entries, setEntries] = useState<{ id: string; preview: string; badge?: string }[]>([]);
+  const [entries, setEntries] = useState<ListItem[]>([]);
 
   useEffect(() => {
     Promise.all([
       fetch("http://localhost:8000/chats").then((r) => r.ok ? r.json() : []).catch(() => []),
       fetch("http://localhost:8000/jobs").then((r) => r.ok ? r.json() : []).catch(() => []),
     ]).then(([chats, jobs]: [ChatEntry[], JobEntry[]]) => {
-      const seen = new Set<string>();
-      const result: { id: string; preview: string; badge?: string }[] = [];
+      const items = new Map<string, ListItem>();
+      console.log(entries)
 
-      for (const chat of chats) {
-        seen.add(chat.chat_id);
-        result.push({ id: chat.chat_id, preview: chat.preview || "Chat session" });
-      }
+      // Jobs first — keyed by chat_id so we group by conversation
       for (const job of jobs) {
-        if (seen.has(job.job_id) || seen.has(job.chat_id)) continue;
-        seen.add(job.job_id);
-        result.push({ id: job.job_id, preview: job.prompt, badge: job.status });
+        const key = job.chat_id || job.job_id;
+        const existing = items.get(key);
+        const preview = job.prompt === "(recovered from disk)" ? "" : job.prompt;
+        if (!existing || (!existing.preview && preview)) {
+          items.set(key, { id: key, preview: preview || existing?.preview || "" });
+        }
       }
+
+      // Chats override with better previews
+      for (const chat of chats) {
+        const existing = items.get(chat.chat_id);
+        if (chat.preview) {
+          items.set(chat.chat_id, { id: chat.chat_id, preview: chat.preview });
+        } else if (!existing) {
+          items.set(chat.chat_id, { id: chat.chat_id, preview: "Chat session" });
+        }
+      }
+
+      // Filter out entries with no useful preview
+      const result = [...items.values()].filter((e) => e.preview);
       setEntries(result);
     });
   }, []);

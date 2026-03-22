@@ -1,0 +1,7 @@
+- contigmap.contigs=[65-65]
+- inference.output_prefix=outputs/users/anonymous/5f119f7e/3c19f4f174a7/v1/design
+- inference.num_designs=1
+- scaffoldguided.scaffoldguided=False
+- scaffoldguided.target_ss=outputs/users/anonymous/5f119f7e/3c19f4f174a7/v1/target_ss.pt
+- scaffoldguided.target_adj=outputs/users/anonymous/5f119f7e/3c19f4f174a7/v1/target_adj.pt
+- inference.ckpt_override_path=models/Complex_Fold_base_ckpt.pt

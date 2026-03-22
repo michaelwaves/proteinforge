@@ -22,6 +22,16 @@ def load_transcript(chat_id: str) -> list[dict]:
         return json.load(f)
 
 
+def extract_preview(message: dict) -> str:
+    if message.get("content"):
+        return str(message["content"])[:80]
+    for part in message.get("parts", []):
+        if part.get("type") == "text" and part.get("text"):
+            text = part["text"].split("\n")[0]
+            return text[:80]
+    return ""
+
+
 def list_chats() -> list[dict]:
     if not os.path.isdir(CHATS_ROOT):
         return []
@@ -34,6 +44,8 @@ def list_chats() -> list[dict]:
         preview = ""
         for msg in messages:
             if msg.get("role") == "user":
-                preview = str(msg.get("content", ""))[:80]
+                preview = extract_preview(msg)
+                if preview:
+                    break
         chats.append({"chat_id": chat_id, "preview": preview})
     return chats

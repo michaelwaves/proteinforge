@@ -1,0 +1,5 @@
+- contigmap.contigs=[45-55]
+- inference.output_prefix=outputs/users/anonymous/5f119f7e/3c19f4f174a7/v1/design
+- inference.num_designs=5
+- potentials.guiding_potentials=["type:monomer_ROG,weight:3,min_dist:4"]
+- potentials.guide_scale=3

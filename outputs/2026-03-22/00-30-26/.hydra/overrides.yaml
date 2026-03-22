@@ -1,0 +1,9 @@
+- contigmap.contigs=[86-86]
+- scaffoldguided.scaffoldguided=True
+- scaffoldguided.target_ss=outputs/users/anonymous/b5bd337f/509fc8b7a5b0/v0/design_ss.pt
+- scaffoldguided.target_adj=outputs/users/anonymous/b5bd337f/509fc8b7a5b0/v0/design_adj.pt
+- scaffoldguided.mask_loops=True
+- potentials.guiding_potentials=["type:monomer_contacts,weight:0.2"]
+- potentials.guide_scale=2
+- inference.output_prefix=outputs/users/anonymous/b5bd337f/509fc8b7a5b0/v0/design
+- inference.num_designs=1

@@ -1,0 +1,2 @@
+[2026-03-22 00:39:30,581][__main__][INFO] - Found GPU with device_name NVIDIA L40S. Will run RFdiffusion on NVIDIA L40S
+[2026-03-22 00:39:30,581][rfdiffusion.inference.model_runners][INFO] - Reading checkpoint from /workspace/RFdiffusion/rfdiffusion/inference/../../models/InpaintSeq_ckpt.pt

@@ -92,18 +92,32 @@ def log_agent_message(job_id: str, message) -> None:
         append_log(job_id, line)
 
 
+def _extract_text_from_content(content) -> str:
+    if isinstance(content, str):
+        return content
+    if isinstance(content, list):
+        parts = []
+        for item in content:
+            if isinstance(item, dict) and "text" in item:
+                parts.append(item["text"])
+            else:
+                parts.append(str(item))
+        return "\n".join(parts)
+    return str(content)
+
+
 def _format_tool_result(block: ToolResultBlock) -> list[str]:
     icon = "❌" if block.is_error else "  "
-    raw = str(block.content)
+    raw = _extract_text_from_content(block.content)
     lines = raw.split("\n")
     result = []
-    for line in lines[:30]:
+    for line in lines[:40]:
         trimmed = line.rstrip()
         if not trimmed:
             continue
         result.append(f"{icon} {trimmed[:200]}")
-    if len(lines) > 30:
-        result.append(f"{icon} ... ({len(lines) - 30} more lines)")
+    if len(lines) > 40:
+        result.append(f"{icon} ... ({len(lines) - 40} more lines)")
     return result
 
 

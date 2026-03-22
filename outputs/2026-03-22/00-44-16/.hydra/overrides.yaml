@@ -1,0 +1,5 @@
+- inference.input_pdb=outputs/users/anonymous/5f119f7e/3c19f4f174a7/v2/template.pdb
+- contigmap.contigs=[51-51]
+- inference.output_prefix=outputs/users/anonymous/5f119f7e/3c19f4f174a7/v2/design
+- inference.num_designs=1
+- diffuser.partial_T=10

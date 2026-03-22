@@ -1,0 +1,8 @@
+- inference.input_pdb=outputs/users/anonymous/5f119f7e/3c19f4f174a7/v1/template.pdb
+- contigmap.contigs=[A1-65/0]
+- contigmap.inpaint_str=[A1-65]
+- contigmap.inpaint_str_helix=[A1-15,A47-61]
+- contigmap.inpaint_str_strand=[A21-28,A34-41]
+- contigmap.inpaint_str_loop=[A16-20,A29-33,A42-46,A62-65]
+- inference.output_prefix=outputs/users/anonymous/5f119f7e/3c19f4f174a7/v1/design
+- inference.num_designs=1

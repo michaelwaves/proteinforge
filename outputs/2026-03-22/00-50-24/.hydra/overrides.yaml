@@ -1,0 +1,6 @@
+- contigmap.contigs=[76-76]
+- inference.output_prefix=/workspace/RFdiffusion/outputs/users/anonymous/716e8aff/137ca0049836/v1/design
+- inference.num_designs=1
+- scaffoldguided.scaffoldguided=True
+- scaffoldguided.target_ss=/workspace/RFdiffusion/outputs/users/anonymous/716e8aff/137ca0049836/v1/scaffold_ss.pt
+- scaffoldguided.target_adj=/workspace/RFdiffusion/outputs/users/anonymous/716e8aff/137ca0049836/v1/scaffold_adj.pt

@@ -1,0 +1,5 @@
+- contigmap.contigs=[60-80]
+- inference.output_prefix=/workspace/RFdiffusion/outputs/users/anonymous/5f119f7e/3c19f4f174a7/v0/design
+- inference.num_designs=1
+- potentials.guide_scale=2
+- potentials.guiding_potentials=["type:monomer_ROG,weight:1,min_dist:5"]
