@@ -28,18 +28,32 @@ export default function ChatPage({
   const userSelectedRef = useRef(false);
 
   useEffect(() => {
-    fetch(`${BACKEND}/jobs/${id}`)
-      .then((res) => (res.ok ? res.json() : null))
-      .then((job) => {
-        if (!job) return;
-        setJobId(job.job_id);
-        const iters = job.current_iteration || 0;
-        if (iters > 0) {
-          setMaxIteration(iters - 1);
-          setIteration(iters - 1);
-        }
-      })
-      .catch(() => {});
+    async function loadJob() {
+      // Try as job ID first
+      let res = await fetch(`${BACKEND}/jobs/${id}`);
+      if (res.ok) {
+        const job = await res.json();
+        applyJob(job);
+        return;
+      }
+      // Fallback: search by chat_id
+      res = await fetch(`${BACKEND}/jobs?chat_id=${id}`);
+      if (res.ok) {
+        const jobs = await res.json();
+        if (jobs.length > 0) applyJob(jobs[0]);
+      }
+    }
+
+    function applyJob(job: { job_id: string; current_iteration: number }) {
+      setJobId(job.job_id);
+      const iters = job.current_iteration || 0;
+      if (iters > 0) {
+        setMaxIteration(iters - 1);
+        setIteration(iters - 1);
+      }
+    }
+
+    loadJob().catch(() => {});
   }, [id]);
 
   useEffect(() => {
