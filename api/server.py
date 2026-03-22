@@ -42,8 +42,11 @@ def generate(request: GenerateRequest, background_tasks: BackgroundTasks):
 
 
 @app.get("/jobs")
-def get_jobs(user_id: str | None = None):
-    return list_jobs(user_id)
+def get_jobs(user_id: str | None = None, chat_id: str | None = None):
+    jobs = list_jobs(user_id)
+    if chat_id:
+        jobs = [j for j in jobs if j.chat_id == chat_id]
+    return jobs
 
 
 @app.get("/jobs/{job_id}")
