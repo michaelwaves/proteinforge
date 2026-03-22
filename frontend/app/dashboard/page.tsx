@@ -12,9 +12,9 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="flex flex-1 flex-col items-center justify-center p-8">
-      <div className="w-full max-w-lg space-y-10">
-        <div className="space-y-3">
+    <div className="flex flex-1 flex-col items-center overflow-hidden p-8">
+      <div className="flex w-full max-w-lg flex-col gap-8 min-h-0">
+        <div className="shrink-0 space-y-3">
           <h1 className="text-4xl font-semibold tracking-tight text-slate-800">
             ProteinForge
           </h1>
@@ -25,16 +25,18 @@ export default function DashboardPage() {
 
         <button
           onClick={handleNewChat}
-          className="w-full rounded-2xl border border-slate-200 bg-white px-5 py-4 text-left text-[15px] text-slate-400 shadow-sm transition-all hover:border-blue-300 hover:shadow-md"
+          className="shrink-0 w-full rounded-2xl border border-slate-200 bg-white px-5 py-4 text-left text-[15px] text-slate-400 shadow-sm transition-all hover:border-blue-300 hover:shadow-md"
         >
           Describe a protein...
         </button>
 
-        <div className="space-y-3">
-          <h2 className="text-xs font-medium uppercase tracking-wider text-slate-400">
+        <div className="flex flex-col gap-3 min-h-0 flex-1">
+          <h2 className="shrink-0 text-xs font-medium uppercase tracking-wider text-slate-400">
             Recent Sessions
           </h2>
-          <ChatList />
+          <div className="flex-1 overflow-y-auto">
+            <ChatList />
+          </div>
         </div>
       </div>
     </div>

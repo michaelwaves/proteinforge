@@ -1,0 +1,57 @@
+[2026-03-21 23:51:26,348][__main__][INFO] - Found GPU with device_name NVIDIA L40S. Will run RFdiffusion on NVIDIA L40S
+[2026-03-21 23:51:26,349][rfdiffusion.inference.model_runners][INFO] - Reading checkpoint from /workspace/RFdiffusion/rfdiffusion/inference/../../models/Base_ckpt.pt
+[2026-03-21 23:51:33,677][rfdiffusion.inference.model_runners][INFO] - Loading checkpoint.
+[2026-03-21 23:51:33,802][rfdiffusion.diffusion][INFO] - Using cached IGSO3.
+[2026-03-21 23:51:33,816][__main__][INFO] - Making design /workspace/RFdiffusion/outputs/users/anonymous/bd29d865/38b879d16c3a/v0/design_0
+[2026-03-21 23:51:33,821][rfdiffusion.inference.model_runners][INFO] - Using contig: ['100-100']
+[2026-03-21 23:51:33,853][rfdiffusion.inference.model_runners][INFO] - Sequence init: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:35,511][rfdiffusion.inference.model_runners][INFO] - Timestep 50, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:35,937][rfdiffusion.inference.model_runners][INFO] - Timestep 49, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:36,372][rfdiffusion.inference.model_runners][INFO] - Timestep 48, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:36,792][rfdiffusion.inference.model_runners][INFO] - Timestep 47, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:37,212][rfdiffusion.inference.model_runners][INFO] - Timestep 46, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:37,633][rfdiffusion.inference.model_runners][INFO] - Timestep 45, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:38,082][rfdiffusion.inference.model_runners][INFO] - Timestep 44, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:38,577][rfdiffusion.inference.model_runners][INFO] - Timestep 43, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:39,069][rfdiffusion.inference.model_runners][INFO] - Timestep 42, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:39,492][rfdiffusion.inference.model_runners][INFO] - Timestep 41, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:39,978][rfdiffusion.inference.model_runners][INFO] - Timestep 40, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:40,419][rfdiffusion.inference.model_runners][INFO] - Timestep 39, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:40,881][rfdiffusion.inference.model_runners][INFO] - Timestep 38, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:41,405][rfdiffusion.inference.model_runners][INFO] - Timestep 37, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:41,838][rfdiffusion.inference.model_runners][INFO] - Timestep 36, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:42,277][rfdiffusion.inference.model_runners][INFO] - Timestep 35, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:42,730][rfdiffusion.inference.model_runners][INFO] - Timestep 34, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:43,209][rfdiffusion.inference.model_runners][INFO] - Timestep 33, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:43,714][rfdiffusion.inference.model_runners][INFO] - Timestep 32, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:44,202][rfdiffusion.inference.model_runners][INFO] - Timestep 31, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:44,696][rfdiffusion.inference.model_runners][INFO] - Timestep 30, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:45,181][rfdiffusion.inference.model_runners][INFO] - Timestep 29, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:45,702][rfdiffusion.inference.model_runners][INFO] - Timestep 28, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:46,178][rfdiffusion.inference.model_runners][INFO] - Timestep 27, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:46,629][rfdiffusion.inference.model_runners][INFO] - Timestep 26, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:47,077][rfdiffusion.inference.model_runners][INFO] - Timestep 25, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:47,497][rfdiffusion.inference.model_runners][INFO] - Timestep 24, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:47,924][rfdiffusion.inference.model_runners][INFO] - Timestep 23, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:48,377][rfdiffusion.inference.model_runners][INFO] - Timestep 22, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:48,881][rfdiffusion.inference.model_runners][INFO] - Timestep 21, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:49,442][rfdiffusion.inference.model_runners][INFO] - Timestep 20, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:49,925][rfdiffusion.inference.model_runners][INFO] - Timestep 19, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:50,394][rfdiffusion.inference.model_runners][INFO] - Timestep 18, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:50,941][rfdiffusion.inference.model_runners][INFO] - Timestep 17, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:51,430][rfdiffusion.inference.model_runners][INFO] - Timestep 16, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:51,882][rfdiffusion.inference.model_runners][INFO] - Timestep 15, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:52,382][rfdiffusion.inference.model_runners][INFO] - Timestep 14, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:52,884][rfdiffusion.inference.model_runners][INFO] - Timestep 13, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:53,332][rfdiffusion.inference.model_runners][INFO] - Timestep 12, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:53,786][rfdiffusion.inference.model_runners][INFO] - Timestep 11, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:54,250][rfdiffusion.inference.model_runners][INFO] - Timestep 10, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:54,684][rfdiffusion.inference.model_runners][INFO] - Timestep 9, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:55,173][rfdiffusion.inference.model_runners][INFO] - Timestep 8, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:55,596][rfdiffusion.inference.model_runners][INFO] - Timestep 7, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:56,017][rfdiffusion.inference.model_runners][INFO] - Timestep 6, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:56,437][rfdiffusion.inference.model_runners][INFO] - Timestep 5, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:56,877][rfdiffusion.inference.model_runners][INFO] - Timestep 4, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:57,299][rfdiffusion.inference.model_runners][INFO] - Timestep 3, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:57,754][rfdiffusion.inference.model_runners][INFO] - Timestep 2, input to next step: ----------------------------------------------------------------------------------------------------
+[2026-03-21 23:51:58,961][__main__][INFO] - Finished design in 0.42 minutes

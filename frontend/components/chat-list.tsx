@@ -10,6 +10,7 @@ interface ChatEntry {
 
 interface JobEntry {
   job_id: string;
+  chat_id: string;
   prompt: string;
   status: string;
   current_iteration: number;
@@ -32,7 +33,8 @@ export function ChatList() {
         result.push({ id: chat.chat_id, preview: chat.preview || "Chat session" });
       }
       for (const job of jobs) {
-        if (seen.has(job.job_id)) continue;
+        if (seen.has(job.job_id) || seen.has(job.chat_id)) continue;
+        seen.add(job.job_id);
         result.push({ id: job.job_id, preview: job.prompt, badge: job.status });
       }
       setEntries(result);

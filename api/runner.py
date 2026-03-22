@@ -46,8 +46,16 @@ async def invoke_claude_agent(job: Job, input_pdb_path: str | None = None) -> No
 
     async for message in query(prompt=user_prompt, options=options):
         log_agent_message(job.job_id, message)
+        update_iteration_count(job)
         if isinstance(message, ResultMessage) and message.is_error:
             raise RuntimeError(message.result or "Agent failed")
+
+
+def update_iteration_count(job: Job) -> None:
+    new_count = count_iterations(job.output_dir)
+    if new_count != job.current_iteration:
+        job.current_iteration = new_count
+        save_job(job)
 
 
 def update_job_status(job: Job, status: str, error: str | None = None) -> None:

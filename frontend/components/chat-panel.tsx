@@ -16,8 +16,23 @@ interface ChatPanelProps {
 async function loadTranscript(chatId: string): Promise<UIMessage[]> {
   try {
     const res = await fetch(`${BACKEND}/chats/${chatId}`);
-    if (!res.ok) return [];
-    return await res.json();
+    if (res.ok) {
+      const msgs = await res.json();
+      if (Array.isArray(msgs) && msgs.length > 0) return msgs;
+    }
+    // Fallback: if chatId is a job, try loading from the job's chat_id
+    const jobRes = await fetch(`${BACKEND}/jobs/${chatId}`);
+    if (jobRes.ok) {
+      const job = await jobRes.json();
+      if (job.chat_id && job.chat_id !== chatId) {
+        const fallback = await fetch(`${BACKEND}/chats/${job.chat_id}`);
+        if (fallback.ok) {
+          const msgs = await fallback.json();
+          if (Array.isArray(msgs) && msgs.length > 0) return msgs;
+        }
+      }
+    }
+    return [];
   } catch {
     return [];
   }

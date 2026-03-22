@@ -2,10 +2,16 @@
 
 import { use, useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import { ChatPanel } from "@/components/chat-panel";
-import { ProteinViewer } from "@/components/protein-viewer";
 import { IterationSlider } from "@/components/iteration-slider";
 import { AgentConsole } from "@/components/agent-console";
+import { RenderCarousel } from "@/components/render-carousel";
+
+const ProteinViewer = dynamic(
+  () => import("@/components/protein-viewer").then((m) => m.ProteinViewer),
+  { ssr: false },
+);
 
 const BACKEND = "http://localhost:8000";
 
@@ -108,6 +114,7 @@ export default function ChatPage({
             )}
           </div>
         </div>
+        <RenderCarousel jobId={jobId} iterationCount={maxIteration + 1} />
         <div className="h-1/3 min-h-0">
           <AgentConsole jobId={jobId} />
         </div>
